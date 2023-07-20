@@ -45,7 +45,7 @@ jobs:
       - run: npm run test
 
   scan:
-    uses: mwarman/.github/workflows/sonarqube-scan.yml@04f196297e9d0c6a74f377d3443394e375ee7c15
+    uses: mwarman/.github/.github/workflows/sonarqube-scan.yml@main
     secrets:
       SONAR_HOST_URL: 'https://mwarman.sonarqube.com'
       SONAR_TOKEN: 'hello-i-am-a-token'
