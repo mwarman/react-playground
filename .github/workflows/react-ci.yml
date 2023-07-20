@@ -1,20 +1,8 @@
-# This workflow performs Continous Integration activities for a React application
-#
-# To use this workflow, perform the following set-up steps:
-#
-# 1. Environment Variables -
-#    Set up the environment variables to obtain values from repo or organization variables or secrets.
-#    For example, ${{ vars.MY_REPO_VAR }} or ${{ secrets.MY_ORG_SECRET }}
-#
-# 2. .nvmrc File
-#    Ensure that you have a .nvmrc file in the base repo directory.
-#    See: https://github.com/nvm-sh/nvm
-
-name: React CI
+name: CI
 
 on:
   pull_request:
-    branches: ["main"]
+    branches: ['main']
 
 env:
   ENV_FILE: ${{ secrets.ENV_CI }}
@@ -59,5 +47,5 @@ jobs:
   scan:
     uses: mwarman/.github/workflows/sonarqube-scan.yml@04f196297e9d0c6a74f377d3443394e375ee7c15
     secrets:
-      SONAR_HOST: 'https://mwarman.sonarqube.com'
+      SONAR_HOST_URL: 'https://mwarman.sonarqube.com'
       SONAR_TOKEN: 'hello-i-am-a-token'
