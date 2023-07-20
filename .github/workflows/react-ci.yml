@@ -1,8 +1,9 @@
 name: CI
 
 on:
-  pull_request:
-    branches: ['main']
+  push:
+    tags:
+      - ci
 
 env:
   ENV_FILE: ${{ secrets.ENV_CI }}
