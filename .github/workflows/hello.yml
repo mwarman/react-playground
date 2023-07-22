@@ -1,0 +1,100 @@
+# This is a hello world style GitHub Starter workflow. A starter workflow
+# serves as a template which may be cloned into a repository. A starter
+# workflow provides a standardized starting place for repository workflow
+# creators to begin.
+# See: https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions
+# See: https://docs.github.com/en/actions/using-workflows/creating-starter-workflows-for-your-organization
+# See: https://docs.github.com/en/actions/using-workflows/using-starter-workflows
+#
+# To use this workflow, perform the following set-up steps:
+#
+# 1. Environment Variables -
+#    Set up the environment variables to obtain values from repo or organization variables or secrets.
+#    For example, ${{ vars.MY_REPO_VAR }} or ${{ secrets.MY_ORG_SECRET }}
+#
+# 2. Triggers -
+#    Review the 'on' section below which contains the GitHub events which trigger
+#    workflow execution. Update the triggers to conform to your repository branching
+#    strategy and code review process.
+#    See: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
+
+name: Hello Starter Workflow
+
+# The 'on' keyword is used to specify which GitHub events trigger workflow execution.
+# See: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
+on:
+  push:
+    tags:
+      - ci
+
+# The 'env' keyword is used to declare environment variables which may be used throughout
+# the workflow. Variables may contain static values or may reference variables or secrets
+# from the repository, environment, or organization.
+# See: https://docs.github.com/en/actions/learn-github-actions/variables
+#
+# GitHub provides several contexts, or objects, during workflow execution. Each context
+# contains values which may be used within your workflows such as commit hashes, workflow
+# job identifiers and more.
+# See: https://docs.github.com/en/actions/learn-github-actions/contexts
+env:
+  GREETING: Hi # set this to your greeting
+  AUDIENCE: workflow creators # set this to your greeting audience
+  A_SECRET: secret_value # set this to a secret value, e.g. ${{ secrets.VAR_NAME }}
+
+jobs:
+  # The 'build' job contains steps which simulate creating a build artifact: 'greeting.txt'
+  # The artifact is uploaded using GitHub's upload artifact action so that it may be retrieved
+  # in a downstream job within this workflow.
+  build:
+    name: 'Build'
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 'Create greeting'
+        run: |
+          echo "${{ env.GREETING }} ${{ env.AUDIENCE }}" > greeting.txt
+      - name: 'List files'
+        run: ls -R
+      - name: 'Upload greeting artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: greeting
+          path: greeting.txt
+
+  # The 'test' job contains steps which retrieve the greeting artifact and
+  # display the contents.
+  # This uses the 'needs' keyword to tell GitHub Actions to wait for jobs to
+  # complete before running this job.
+  test:
+    name: 'Test'
+    needs: build
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 'List files before download'
+        run: ls -R
+      - name: 'Download greeting artifact'
+        uses: actions/download-artifact@v3
+        with:
+          name: greeting
+      - name: 'List files after download'
+        run: ls -R
+      - name: 'Display greeting'
+        run: cat greeting.txt
+
+  # Call a shared workflow to perform one or more jobs
+  # Shared workflows encapsulate reusable elements of workflows
+  # Shared workflows may be created at the repository, organization, or enterprise level
+  shared:
+    name: 'Call Shared'
+
+    uses: mwarman/.github/.github/workflows/hello-shared-workflow.yml@main
+    with:
+      GREETING: ${{ env.GREETING }}
+      AUDIENCE: ${{ env.AUDIENCE }}
+    secrets:
+      DO_NOT_TELL: ${{ env.A_SECRET }}
