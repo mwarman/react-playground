@@ -93,8 +93,5 @@ jobs:
     name: 'Call Shared'
 
     uses: mwarman/.github/.github/workflows/hello-shared-workflow.yml@main
-    with:
-      GREETING: ${{ vars.GREETING }}
-      AUDIENCE: ${{ vars.AUDIENCE }}
     secrets:
       DO_NOT_TELL: ${{ secrets.A_SECRET }}
