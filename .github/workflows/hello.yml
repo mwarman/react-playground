@@ -37,8 +37,8 @@ on:
 # job identifiers and more.
 # See: https://docs.github.com/en/actions/learn-github-actions/contexts
 env:
-  GREETING: Hi # set this to your greeting
-  AUDIENCE: workflow creators # set this to your greeting audience
+  GREETING: 'Hi' # set this to your greeting
+  AUDIENCE: 'workflow creators' # set this to your greeting audience
   A_SECRET: ${{ secrets.A_SECRET }} # set this to a secret value, e.g. ${{ secrets.VAR_NAME }}
 
 jobs:
@@ -54,7 +54,7 @@ jobs:
     steps:
       - name: 'Create greeting'
         run: |
-          echo "$GREETING $AUDIENCE" > greeting.txt
+          echo "$GREETING $AUDIENCE!" > greeting.txt
       - name: 'List files'
         run: ls -R
       - name: 'Upload greeting artifact'
@@ -94,7 +94,7 @@ jobs:
 
     uses: mwarman/.github/.github/workflows/hello-shared-workflow.yml@main
     with:
-      GREETING: $GREETING
-      AUDIENCE: $AUDIENCE
+      GREETING: ${{ vars.GREETING }}
+      AUDIENCE: ${{ vars.AUDIENCE }}
     secrets:
-      DO_NOT_TELL: $A_SECRET
+      DO_NOT_TELL: ${{ secrets.A_SECRET }}
