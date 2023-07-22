@@ -33,6 +33,7 @@ on:
   pull_request:
     branches:
       - 'main'
+  workflow_dispatch:
 
 # The 'env' keyword is used to declare environment variables which may be used throughout
 # the workflow. Variables may contain static values or may reference variables or secrets
