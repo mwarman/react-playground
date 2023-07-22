@@ -39,7 +39,7 @@ on:
 env:
   GREETING: Hi # set this to your greeting
   AUDIENCE: workflow creators # set this to your greeting audience
-  A_SECRET: secret_value # set this to a secret value, e.g. ${{ secrets.VAR_NAME }}
+  A_SECRET: ${{ secrets.A_SECRET }} # set this to a secret value, e.g. ${{ secrets.VAR_NAME }}
 
 jobs:
   # The 'build' job contains steps which simulate creating a build artifact: 'greeting.txt'
@@ -54,7 +54,7 @@ jobs:
     steps:
       - name: 'Create greeting'
         run: |
-          echo "${{ env.GREETING }} ${{ env.AUDIENCE }}" > greeting.txt
+          echo "$GREETING $AUDIENCE" > greeting.txt
       - name: 'List files'
         run: ls -R
       - name: 'Upload greeting artifact'
@@ -94,7 +94,7 @@ jobs:
 
     uses: mwarman/.github/.github/workflows/hello-shared-workflow.yml@main
     with:
-      GREETING: ${{ env.GREETING }}
-      AUDIENCE: ${{ env.AUDIENCE }}
+      GREETING: $GREETING
+      AUDIENCE: $AUDIENCE
     secrets:
-      DO_NOT_TELL: ${{ env.A_SECRET }}
+      DO_NOT_TELL: $A_SECRET
